@@ -61,6 +61,7 @@ final class Module_PaymentCredits extends GWF_PaymentModule
 	public function getSiteNameToken() { return 'gwf'; }
 	public function getSupportedCurrencies() { return array('EUR', 'USD'); }
 	public function canAfford(GWF_User $user, $price) { return $user->getCredits() >= $this->priceToCredits($price); }
+	public function canOrder(GWF_User $user, GWF_Orderable $gdo) { return (!($gdo instanceof GWF_CreditsOrder)); }
 	public function displayPaysiteButton(GWF_Module $module, GWF_Order $order, GWF_Orderable $gdo, GWF_User $user)
 	{
 		$tVars = array(
