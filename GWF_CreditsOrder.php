@@ -72,13 +72,19 @@ final class GWF_CreditsOrder extends GDO implements GWF_Orderable
 		return $module->template('order.php', $tVars);
 	}
 	
-	public function executeOrder(GWF_Module $module, GWF_User $user)
+	public function executeOrder(GWF_Module $module, GWF_User $user, &$message)
 	{
+// 		if ($user->getID() === GWF_User::getStaticOrGuest()->getID())
+// 		{
+// 			$user = GWF_User::getStaticOrGuest();
+// 		}
+		
 		if (!$user->increase('user_credits', $this->getCredits()))
 		{
+			$message = GWF_HTML::err('ERR_DATABASE', array(__FILE__, __LINE__));
 			return false;
 		}
-		$module->message('msg_purchased', array($this->getCredits(), $user->getCredits(), $this->displayPrice()));
+		$message = $module->message('msg_purchased', array($this->getCredits(), $this->displayPrice(), $user->getCredits()));
 		return true;
 	}
 	

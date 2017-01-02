@@ -1,0 +1,7 @@
+gwf-payment-button.gwf-credits-button input {
+	background: gold;
+	color: #111;
+	padding: 0.5em 1em;
+	font-weight: bold;
+	border-radius: 1em;
+}

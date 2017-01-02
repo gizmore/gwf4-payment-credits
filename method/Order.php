@@ -56,9 +56,10 @@ final class PaymentCredits_Order extends GWF_Method
 	private function form()
 	{
 		$m = $this->module;
+		$amount = Common::getRequestFloat('amount', $m->cfgMinPurchasePrice());
 		$data = array();
-		$data['amount'] = array(GWF_Form::FLOAT, Common::getRequestFloat('amount', $m->cfgMinPurchasePrice()), $m->lang('th_purchase_amount'));
-		$data['credits'] = array(GWF_Form::SSTRING, '', $m->lang('th_purchase_credits'));
+		$data['amount'] = array(GWF_Form::FLOAT, $amount, $m->lang('th_purchase_amount'));
+		$data['credits'] = array(GWF_Form::SSTRING, $m->priceToCredits($amount), $m->lang('th_purchase_credits'));
 		$data['order'] = array(GWF_Form::SUBMIT, $m->lang('btn_order'));
 		return new GWF_Form($this, $data);
 	}
@@ -71,6 +72,9 @@ final class PaymentCredits_Order extends GWF_Method
 		$form = $this->form();
 		$tVars = array(
 			'form' => $form->templateY($this->module->lang('form_title_order')),
+			'one' => '1',
+			'currency' => Module_Payment::instance()->cfgCurrency(),
+			'rate' => $this->module->cfgConversionRateToCredits(),
 		);
 		return $this->module->template('order_start.php', $tVars);
 	}
